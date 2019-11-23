@@ -14,7 +14,7 @@ import java.util.*;
 
 public class DataConverter {
 
-    private static final String CSV_FILE_LOCAL = "C:\\Users\\slawo\\Downloads\\dane_filmowe.csv";
+    private static final String CSV_FILE_LOCAL = "";
 
     public List<Person> convertData() {
         BufferedReader br = null;
