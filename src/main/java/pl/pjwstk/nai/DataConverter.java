@@ -10,15 +10,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class DataConverter {
 
-    private static final String CSV_FILE_LOCAL = "";
+    private static final String CSV_FILE_LOCAL = "C:\\Users\\slawo\\Downloads\\dane_filmowe.csv";
 
-    public void convertData() {
+    public List<Person> convertData() {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ";";
@@ -48,12 +46,27 @@ public class DataConverter {
                 }
             }
 
-            convertToJson(personList);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return personList;
+    }
+
+    public Map<Person, HashMap<Film, Double>> getMappedData() {
+        List<Person> personList = convertData();
+        Map<Person, HashMap<Film, Double>> mapToReturn = new HashMap<>();
+
+        personList.forEach(u -> {
+            HashMap<Film, Double> filmDoubleHashMap = new HashMap<>();
+            u.getFilmsList().forEach(k -> {
+                filmDoubleHashMap.put(k, k.getGrade());
+            });
+
+            mapToReturn.put(u, filmDoubleHashMap );
+        });
+
+        return mapToReturn;
     }
 
 
@@ -85,7 +98,7 @@ public class DataConverter {
 
         for (int i = 2; i < record.size() - 1; i++) {
             if (!record.get(i).equals("") && !record.get(i + 1).equals("")) {
-                Film f = new Film(record.get(i).toString().toLowerCase(), Integer.parseInt(record.get(i + 1).toString().toLowerCase()));
+                Film f = new Film(record.get(i).toString().toLowerCase(), round(Integer.parseInt(record.get(i + 1).toString().toLowerCase()) * 0.1, 2));
                 films.add(f);
                 i++;
             }
@@ -102,5 +115,14 @@ public class DataConverter {
     private String convertToJson(List<Person> personList) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(personList);
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

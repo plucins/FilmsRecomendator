@@ -2,9 +2,9 @@ package pl.pjwstk.nai.model;
 
 public class Film {
     private String filmName;
-    private int grade;
+    private double grade;
 
-    public Film(String filmName, int grade) {
+    public Film(String filmName, double grade) {
         this.filmName = filmName;
         this.grade = grade;
     }
@@ -17,11 +17,11 @@ public class Film {
         this.filmName = filmName;
     }
 
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
 
